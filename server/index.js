@@ -4,12 +4,13 @@ const bodyParser = require("body-parser");
 const port = process.env.PORT || 8000;
 const cors = require("cors");
 const logger = require("morgan");
+const url = process.env.URL || "mongodb://localhost/Projects";
 
 const mongoose = require("mongoose");
 
 // Connect to MongoDB
 mongoose.connect(
-  "mongodb://localhost/Projects", {
+  url, {
     useNewUrlParser: true
   }
 );
@@ -31,6 +32,8 @@ app.use(bodyParser.urlencoded({
 
 app.use("/project", project);
 
-app.listen(port, function () {
-  console.log("listening on port: ", port);
-});
+// app.listen(port, function () {
+//   console.log("listening on port: ", port);
+// });
+
+app.listen();

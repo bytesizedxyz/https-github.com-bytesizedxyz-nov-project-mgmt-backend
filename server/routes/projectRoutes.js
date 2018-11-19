@@ -12,13 +12,12 @@ const Project = require("../models/Projects");
 
 /* GET all projects */
 router.get("/", (req, res, next) => {
-  Project.find().then(projects => {
-    const completedProjects = projects.map(({ToDos}) => {
-      ToDos.filter(todo => todo.deleted === false)
+  const allProj = Project.find().then(projects => {
+    const completedProjects = projects.map(({toDo}) => {
+      toDo.filter(todo => todo.deleted === false)
     })
-
-    res.json(completedProjects);
   });
+  res.json(allProj);
 });
 
 // Get a project
@@ -28,23 +27,17 @@ router.get("/:id", (req, res) => {
 
 // Post new project
 router.post("/", (req, res) => {
-  const todos = req.body
-  const {Name, Description, } = req.body;
+  const { Name, Description, } = req.body;
+  const todos = req.body.ToDos
   const newProject = new Project({
     title: Name,
     description: Description,
-    toDo: [
-      {        
-        description: "Creating project",
-        completed: false, 
-        deleted: false
-      }
-    ]
+    toDo: todos
   })
-  console.log(newProject)
-  // Project
-  //   .create(req.body)
-  //   .then(project => res.json(project));
+  newProject.save((err) => {
+    if (err) return handleError(err);
+    // saved!
+  });
 });
 
 // TodoRoutes
@@ -58,6 +51,17 @@ router.post("/:projId/todo", (req, res) => {
 });
 
 router.delete("/:projId/:todoId", (req, res) => {
-  let 
+
+  let updatedProj = Project.findById(req.params.projId);
+  let { toDo } = updatedProj;
+  const { projId, todoId } = req.params;
+  
+  toDo.splice(toDo.findIndex((todo) => todo._id === req.params.todoId), 1);
+
+  updatedProj.toDo = toDo;
+
+  Project.findByIdAndUpdate(projId, updatedProj);
+
+  res.json(updatedProj)
 });
 module.exports = router;
