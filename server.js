@@ -9,8 +9,9 @@ const mongoose = require("mongoose");
 
 // Connect to MongoDB
 mongoose.connect(
-  "mongodb://localhost/Projects",
-  { useNewUrlParser: true }
+  "mongodb://localhost/Projects", {
+    useNewUrlParser: true
+  }
 );
 
 const db = mongoose.connection;
@@ -19,23 +20,17 @@ db.once("open", () => console.log("db is listening"));
 
 const app = express();
 
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
-
-const index = require("./routes/indexRoutes");
-const todos = require("./routes/todosRoutes");
-
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
+const project = require("./routes/projectRoutes");
 
 app.use(logger("dev"));
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
-app.use("/", index);
-app.use("/todos", todos);
+app.use("/project", project);
 
-app.listen(port, function() {
+app.listen(port, function () {
   console.log("listening on port: ", port);
 });

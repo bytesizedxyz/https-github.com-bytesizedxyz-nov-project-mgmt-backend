@@ -1,9 +1,15 @@
 const mongoose = require("mongoose");
 
-const projectSchema = new mongoose.Schema({
-  description: { type: String },
-  completed: { type: Boolean },
-  id: { type: Number }
+const toDoSchema = new mongoose.Schema({
+  description: {
+    type: String
+  },
+  completed: {
+    type: Boolean
+  },
+  id: {
+    type: Number
+  }
 });
 
-module.exports = mongoose.model("Project", projectSchema);
+module.exports = mongoose.model("ToDos", toDoSchema);
