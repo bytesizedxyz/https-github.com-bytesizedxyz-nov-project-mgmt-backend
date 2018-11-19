@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
-const { toDos } = require("./ToDos");
+const { toDoSchema } = require("./ToDos");
 
 const projectSchema = new mongoose.Schema({
-  title: { type: String },
-  description: { type: String },
-  toDo: { type: toDos},
+  title: String,
+  description: String,
+  toDo: [toDoSchema],
   createdAt: { type: Date, default: Date.now }
 });
 
