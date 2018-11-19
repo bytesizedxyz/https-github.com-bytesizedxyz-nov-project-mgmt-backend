@@ -1,4 +1,5 @@
 {
+  "alias": "november-training-project-mgmt-backend.bytesized.xyz",
   "version": 2,
   "builds": [
     { "src": "server.js", "use": "@now/node-server" }
