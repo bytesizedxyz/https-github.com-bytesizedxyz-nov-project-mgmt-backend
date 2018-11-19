@@ -2,7 +2,7 @@
   "alias": "november-training-project-mgmt-backend.bytesized.xyz",
   "version": 2,
   "builds": [
-    { "src": "server.js", "use": "@now/node-server" }
+    { "src": "server/index.js", "use": "@now/node-server" }
   ],
   "env": {
     "URL": "@backend-mongo-url"

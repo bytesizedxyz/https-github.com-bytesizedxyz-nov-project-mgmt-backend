@@ -34,7 +34,11 @@ router.post("/", (req, res) => {
     title: Name,
     description: Description,
     toDo: [
-      "Creating project", false, false, 0
+      {        
+        description: "Creating project",
+        completed: false, 
+        deleted: false
+      }
     ]
   })
   console.log(newProject)
