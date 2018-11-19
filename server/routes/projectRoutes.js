@@ -11,13 +11,27 @@ const Project = require("../models/Projects");
 // CRUD PROJECT Routes
 
 /* GET all projects */
-router.get("/", (req, res, next) => {
-  const allProj = Project.find().then(projects => {
-    const completedProjects = projects.map(({toDo}) => {
-      toDo.filter(todo => todo.deleted === false)
-    })
+
+router.get("/all/deleted", (req, res, next) => {
+  const toDoFilter = toDos.filter(item => {
+    item.deleted === false
+  })
+  Project.find({"projects.toDo": toDoFilter }).then(projects => {
+    console.log("projects", projects);
+    const completedProjects = projects.forEach(project => {
+      // console.log(project.toDo)
+      project.toDo = project.toDo.filter(todo => todo.deleted === false);
+    });
+    console.log(completedProjects);
+    res.json(completedProjects);
   });
-  res.json(allProj);
+});
+
+router.get("/all", (req, res, next) => {
+  Project.find().then(projects => {
+    console.log("projects", projects);
+    res.json(projects);
+  });
 });
 
 // Get a project
@@ -27,14 +41,14 @@ router.get("/:id", (req, res) => {
 
 // Post new project
 router.post("/", (req, res) => {
-  const { Name, Description, } = req.body;
-  const todos = req.body.ToDos
+  const { Name, Description } = req.body;
+  const todos = req.body.ToDos;
   const newProject = new Project({
     title: Name,
     description: Description,
     toDo: todos
-  })
-  newProject.save((err) => {
+  });
+  newProject.save(err => {
     if (err) return handleError(err);
     // saved!
   });
@@ -51,17 +65,16 @@ router.post("/:projId/todo", (req, res) => {
 });
 
 router.delete("/:projId/:todoId", (req, res) => {
-
   let updatedProj = Project.findById(req.params.projId);
   let { toDo } = updatedProj;
   const { projId, todoId } = req.params;
-  
-  toDo.splice(toDo.findIndex((todo) => todo._id === req.params.todoId), 1);
+
+  toDo.splice(toDo.findIndex(todo => todo._id === req.params.todoId), 1);
 
   updatedProj.toDo = toDo;
 
   Project.findByIdAndUpdate(projId, updatedProj);
 
-  res.json(updatedProj)
+  res.json(updatedProj);
 });
 module.exports = router;
