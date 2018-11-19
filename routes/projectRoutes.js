@@ -11,12 +11,18 @@ const Project = require("../models/Projects");
 // Route = /project...
 // CRUD PROJECT Routes
 
-/* GET all todos */
+/* GET all projects */
 router.get('/', (req, res, next) => {
   Todo
     .find()
     .then(todos => res.json(todos))
 });
+
+// Get a project
+router.get("/:id", (req, res) => {
+  Project
+    .findById()
+})
 
 // Post new project
 router.post("/", (req, res) => {
@@ -28,5 +34,5 @@ router.post("/", (req, res) => {
 
 // TodoRoutes
 
-router.post("")
+router.post("/")
 module.exports = router;
